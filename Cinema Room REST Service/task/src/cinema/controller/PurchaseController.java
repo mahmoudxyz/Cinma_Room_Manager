@@ -4,6 +4,7 @@ import cinema.model.BookedSeat;
 import cinema.model.PurchasedSeat;
 import cinema.model.Seat;
 import cinema.model.SeatUnit;
+import cinema.repo.StatsRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/purchase")
 public class PurchaseController {
+    StatsRepo repo = StatsRepo.getInstance();
 
     List<String> purchasedSeats = new ArrayList<String>();
     PurchasedSeat purchasedSeat = new PurchasedSeat();
@@ -43,6 +45,10 @@ public class PurchaseController {
             purchasedSeat.setSeatUnit(returnSeat);
             hashTempo.put(randomTokenTempo.toString(), returnSeat);
             bookedSeat.setBookedSeats(hashTempo);
+
+            repo.setNumberOfPurchasedTickets(repo.getNumberOfPurchasedTickets()+ 1);
+            repo.setNumberOfAvailableSeats(repo.getNumberOfAvailableSeats() -1);
+            repo.setCurrentIncome(repo.getCurrentIncome() + returnSeat.getPrice());
 
 
             return ResponseEntity.ok(purchasedSeat.toString());
