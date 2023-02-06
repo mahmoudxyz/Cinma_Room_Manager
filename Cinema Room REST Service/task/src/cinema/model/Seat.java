@@ -8,6 +8,7 @@ public class Seat {
     private int totalRows = 9;
     private int totalColumns = 9;
 
+
     public List<String> getAvailableSeats() {
         return availableSeats;
     }
